@@ -24,13 +24,6 @@ const App = () => {
     return res.data;
   };
 
-  const searchUsers = async text => {
-    const result = await getdata(
-      `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-    setUsers(result.items);
-  };
-
   const getUser = async username => {
     const user = await getdata(
       `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
@@ -69,12 +62,11 @@ const App = () => {
                 render={props => (
                   <Fragment>
                     <Search
-                      searchUsers={searchUsers}
                       clearUsers={clearUsers}
                       showClear={users.length > 0}
                       setAlert={showAlert}
                     />
-                    <Users users={users} loading={loading} />
+                    <Users />
                   </Fragment>
                 )}
               />
