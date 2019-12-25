@@ -1,14 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { Repos } from '../repos/Repos';
+import GithubContext from '../../context/github/githubContext';
 
-const User = ({ user, loading, repos, getUserRepos, getUser, match }) => {
+const User = ({ repos, getUserRepos, match }) => {
+  const githubContext = useContext(GithubContext);
+
   useEffect(() => {
-    getUser(match.params.login);
+    githubContext.getUser(match.params.login);
     getUserRepos(match.params.login);
     //eslint-disable-next-line
   }, []);
@@ -27,9 +30,9 @@ const User = ({ user, loading, repos, getUserRepos, getUser, match }) => {
     public_gists,
     company,
     hireable
-  } = user;
+  } = githubContext.user;
 
-  if (loading) return <Spinner />;
+  if (githubContext.loading) return <Spinner />;
   return (
     <Fragment>
       <Link to='/' className='btn btn-light'>
@@ -110,9 +113,6 @@ const User = ({ user, loading, repos, getUserRepos, getUser, match }) => {
 };
 
 User.propsTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  getUser: PropTypes.func.isRequired,
   getRepos: PropTypes.func.isRequired,
   repos: PropTypes.array.isRequired
 };

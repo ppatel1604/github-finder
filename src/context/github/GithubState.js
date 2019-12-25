@@ -5,7 +5,7 @@ import GithubReducer from './githubReducer';
 import {
   CLEAR_USERS,
   GET_REPOS,
-  GET_USERS,
+  GET_USER,
   SEARCH_USERS,
   SET_LOADING
 } from '../types';
@@ -38,6 +38,18 @@ const GithubState = props => {
     });
   };
 
+  const getUser = async username => {
+    const user = await getdata(
+      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    dispatch({
+      type: GET_USER,
+      payload: user
+    });
+  };
+
+  const clearUsers = () => dispatch({ type: CLEAR_USERS });
+
   return (
     <GithubContext.Provider
       value={{
@@ -45,7 +57,9 @@ const GithubState = props => {
         user: state.user,
         repos: state.repos,
         loading: state.loading,
-        searchUsers
+        searchUsers,
+        clearUsers,
+        getUser
       }}
     >
       {props.children}

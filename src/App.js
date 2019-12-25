@@ -11,8 +11,6 @@ import User from './components/users/User';
 import GithubState from './context/github/GithubState';
 
 const App = () => {
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState({});
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -24,23 +22,11 @@ const App = () => {
     return res.data;
   };
 
-  const getUser = async username => {
-    const user = await getdata(
-      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-    );
-    setUser(user);
-  };
-
   const getUserRepos = async username => {
     const repos = await getdata(
       `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
     setRepos(repos);
-  };
-
-  const clearUsers = () => {
-    setUsers([]);
-    setLoading(false);
   };
 
   const showAlert = (message, type) => {
@@ -61,11 +47,7 @@ const App = () => {
                 exact
                 render={props => (
                   <Fragment>
-                    <Search
-                      clearUsers={clearUsers}
-                      showClear={users.length > 0}
-                      setAlert={showAlert}
-                    />
+                    <Search setAlert={showAlert} />
                     <Users />
                   </Fragment>
                 )}
@@ -77,9 +59,7 @@ const App = () => {
                 render={props => (
                   <User
                     {...props}
-                    getUser={getUser}
                     getUserRepos={getUserRepos}
-                    user={user}
                     repos={repos}
                     loading={loading}
                   />
