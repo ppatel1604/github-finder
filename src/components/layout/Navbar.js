@@ -8,7 +8,7 @@ const Navbar = ({ icon, title }) => {
   return (
     <div className='navbar bg-primary'>
       <h1>
-        <FontAwesomeIcon icon={icon} /> {title}
+        <Link to='/'><FontAwesomeIcon icon={icon} /> {title}</Link>
       </h1>
       <ul>
         <li>
